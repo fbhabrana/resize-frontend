@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseURL = process.env.BASE_URL || 'http://localhost:5000/api/data';
+const baseURL = process.env.BASE_URL || 'https://resize-backend-latest.vercel.app/api/data';
 
 const axiosInstance = axios.create({
   baseURL,
