@@ -46,10 +46,7 @@ const DataTable = () => {
         const data = await getAllData();
         setDataList(data); // Update dataList with fetched data
         // Fetch counts when component mounts
-        const counts = await getCounts();
-    
-        setAddCount(counts.addCount);
-        setUpdateCount(counts.updateCount);
+  
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -88,10 +85,7 @@ const DataTable = () => {
           </button>
         </form>
       </div>
-      <div>
-        <p>Add Count: {addCount}</p>
-        <p>Update Count: {updateCount}</p>
-      </div>
+  
       <table className="table">
         <thead>
           <tr>
