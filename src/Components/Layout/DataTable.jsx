@@ -10,19 +10,42 @@ const DataTable = () => {
 
   const [dataList, setDataList] = useState([]);
   const [editIndex, setEditIndex] = useState(null);
+
   const [addCount, setAddCount] = useState(0); // State to store add count
   const [updateCount, setUpdateCount] = useState(0); // State to store update count
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getAllData();
+        setDataList(data); // Update dataList with fetched data
+        // Fetch counts when component mounts
+        const counts = await getCounts();
+        setAddCount(counts.addCount);
+        setUpdateCount(counts.updateCount);
+  
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
 
+    fetchData();
+  }, [formData]); 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       if (editIndex !== null) {
         await updateData(formData._id, formData);
         console.log('Data updated successfully');
+  
+        // Update dataList with the updated data
+        const updatedList = [...dataList];
+        updatedList[editIndex] = formData;
+        setDataList(updatedList);
+  
       } else {
         const response = await addData(formData);
         setDataList([...dataList, response]); // Add new data to dataList
@@ -34,26 +57,13 @@ const DataTable = () => {
       console.error('Error:', error);
     }
   };
-
+  
   const handleEdit = (index) => {
     setEditIndex(index);
     setFormData(dataList[index]); // Populate form fields with selected row data
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getAllData();
-        setDataList(data); // Update dataList with fetched data
-        // Fetch counts when component mounts
-  
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-  }, [dataList]); 
+ 
 
   return (
     <div>
@@ -85,7 +95,10 @@ const DataTable = () => {
           </button>
         </form>
       </div>
-  
+      <div>
+        <p>Add Count: {addCount}</p>
+        <p>Update Count: {updateCount}</p>
+      </div>
       <table className="table">
         <thead>
           <tr>
