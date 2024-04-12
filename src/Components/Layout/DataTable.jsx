@@ -53,7 +53,7 @@ const DataTable = () => {
     };
 
     fetchData();
-  }, []); 
+  }, [dataList]); 
 
   return (
     <div>
